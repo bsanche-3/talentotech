@@ -9,7 +9,7 @@ st.title('Agroindustria en Colombia')
 np.random.seed(42)  # Para resultados reproducibles
 data = pd.DataFrame(
     np.random.randn(150, 8),
-    columns=['Variable 1', 'Variable 2', 'Variable 3', 'Variable 4', 'Variable 5', 'Variable 6', 'Variable 7', 'Variable 8']
+    columns=['Producción de Café', 'Producción de Cacao', 'Producción de Palma', 'Exportaciones de Café', 'Exportaciones de Cacao', 'Exportaciones de Palma', 'Consumo Interno de Café', 'Consumo Interno de Cacao']
 )
 
 # Mostrar los datos en la aplicación de Streamlit
