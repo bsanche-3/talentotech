@@ -12,6 +12,12 @@ data = pd.DataFrame(
     columns=['Producción de Café', 'Producción de Cacao', 'Producción de Palma', 'Exportaciones de Café', 'Exportaciones de Cacao', 'Exportaciones de Palma', 'Consumo Interno de Café', 'Consumo Interno de Cacao']
 )
 
+# KPIs principales
+col1, col2, col3 = st.columns(3)
+col1.metric("📊 Producción Total", f"{data[['Producción de Café', 'Producción de Cacao', 'Producción de Palma']].sum().sum():,.2f} Tn")
+col2.metric("🚢 Exportaciones Totales", f"{data[['Exportaciones de Café', 'Exportaciones de Cacao', 'Exportaciones de Palma']].sum().sum():,.2f} Tn")
+col3.metric("💰 Consumo Interno Total", f"{data[['Consumo Interno de Café', 'Consumo Interno de Cacao']].sum().sum():,.2f} Tn")
+
 # Mostrar los datos en la aplicación de Streamlit
 st.write("Datos aleatorios de agroindustria en Colombia")
 st.write(data)
