@@ -25,9 +25,17 @@ st.write(data)
 # Selección de variables para la figura
 selected_variables = st.multiselect('Seleccione las variables para la figura', data.columns, default=data.columns[:2])
 
+# Selección del tipo de gráfico
+graph_type = st.selectbox('Seleccione el tipo de gráfico', ['Línea', 'Barra', 'Área'])
+
 # Mostrar la figura
 if len(selected_variables) >= 2:
-    st.line_chart(data[selected_variables])
+    if graph_type == 'Línea':
+        st.line_chart(data[selected_variables])
+    elif graph_type == 'Barra':
+        st.bar_chart(data[selected_variables])
+    elif graph_type == 'Área':
+        st.area_chart(data[selected_variables])
 else:
     st.warning('Por favor, seleccione al menos dos variables para la figura.')
 
