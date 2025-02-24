@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import os
+from google import genai
 
 # Título del dashboard
 st.title('Agroindustria en Colombia')
@@ -39,4 +41,46 @@ if len(selected_variables) >= 2:
 else:
     st.warning('Por favor, seleccione al menos dos variables para la figura.')
 
-# Ejecutar el archivo con el comando: streamlit run entrenamiento-dashboard.py
+# Crear botón para obtener análisis de la gráfica
+if st.button("Obtener Análisis de Gráfica"):
+    df_seleccionado = data[selected_variables]
+    describe_df = df_seleccionado.describe().transpose()
+    describe_values = describe_df.to_dict(orient="index")
+
+    prompt = f"""
+    Analiza y dame recomendaciones a partir de un análisis descriptivo de los siguientes datos:
+    {describe_values}
+    correspondiente a la gráfica de tipo {graph_type}.
+    """
+    
+    def obtener_analisis_gemini(prompt):
+        # Obtener la clave API desde la variable de entorno
+        api_key = os.getenv('GEMINI_API_KEY_TALENTOTECH')
+
+        if api_key is None:
+            raise ValueError("La clave API de Gemini no está configurada. Asegúrate de configurar la variable de entorno 'GEMINI_API_KEY_TALENTOTECH'.")
+
+        # Usar la API de Gemini
+        client = genai.Client(api_key=api_key)
+
+        # Definir el contexto para el modelo de Gemini
+        sys_instruct = """
+        Eres un asistente de análisis de datos. Tu tarea es proporcionar análisis descriptivos detallados y útiles para los datos proporcionados. 
+        Asegúrate de explicar cualquier patrón, tendencia o anomalía que observes en los datos. 
+        Proporciona recomendaciones basadas en el análisis cuando sea posible.
+        """
+
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            config=genai.types.GenerateContentConfig(
+                system_instruction=sys_instruct,
+                temperature=0.1
+            ),
+            contents=prompt,
+        )
+
+        return response.text.strip()
+
+    analisis = obtener_analisis_gemini(prompt)
+    st.write("Análisis de Gráfica:")
+    st.write(analisis)
