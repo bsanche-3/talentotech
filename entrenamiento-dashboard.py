@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
-from google.generativeai import genai
+from google import genai
 
 # Título del dashboard
 st.title('Agroindustria en Colombia')
